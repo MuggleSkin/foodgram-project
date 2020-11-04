@@ -1,25 +1,35 @@
 <div class="card" data-id="{{ recipe.id }}">
     {% load thumbnail %}
     {% thumbnail recipe.image "960x339" crop="center" upscale=True as im %}
-    <a href="#" class="link" target="_blank">
+    <a href="{% url 'recipe' username=recipe.author.username recipe_id=recipe.id %}" class="link" target="_blank">
         <img src="{{ im.url }}" alt="" class="card__image">
     </a>
     {% endthumbnail %}
     <div class="card__body">
-        <a class="card__title link" href="#" target="_blank">{{ recipe.title }}</a>
+        <a class="card__title link" href="{% url 'recipe' username=recipe.author.username recipe_id=recipe.id %}" 
+        target="_blank">{{ recipe.title }}</a>
         <ul class="card__items">
-            <li class="card__item"><span class="badge badge_style_green">Обед</span></li>
-            <li class="card__item"><span class="badge badge_style_orange">Завтрак</span></li>
-            <li class="card__item"><span class="badge badge_style_purple">Ужин</span></li>
+            {% with tags=recipe.tags.names %}
+                {% if 'breakfast' in tags %}
+                    <li class="card__item"><span class="badge badge_style_orange">Завтрак</span></li>
+                {% endif %}
+                {% if 'lunch' in tags %}
+                    <li class="card__item"><span class="badge badge_style_green">Обед</span></li>
+                {% endif %}
+                {% if 'dinner' in tags %}
+                    <li class="card__item"><span class="badge badge_style_purple">Ужин</span></li>
+                {% endif %}
+            {% endwith %}
         </ul>
         <div class="card__items card__items_column">
             <p class="card__text"><span class="icon-time"></span> {{ recipe.cooking_time }} мин.</p>
-            <p class="card__text"><span class="icon-user"></span> <a href="#" style="color: black">{{ recipe.author.get_full_name }}</a></p>
+            <p class="card__text"><span class="icon-user"></span> <a href="{% url 'profile' username=recipe.author.username %}" 
+                style="color: black">{{ recipe.author.username }}</a></p>
         </div>
     </div>
     <div class="card__footer">
-        <button class="button button_style_light-blue" name="purchases" data-out><span class="icon-plus button__icon"></span>Добавить в покупки</button>
         {% if user.is_authenticated %}
+        <button class="button button_style_light-blue" name="purchases" data-out><span class="icon-plus button__icon"></span>Добавить в покупки</button>
         <button class="button button_style_none" name="favorites" data-out><span class="icon-favorite"></span></button>
         {% endif %}
     </div>

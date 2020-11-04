@@ -6,6 +6,7 @@ class Api {
   getPurchases () {
     return fetch(`/purchases`, {
       headers: {
+        "X-Requested-With": "XMLHttpRequest",
         'Content-Type': 'application/json'
       }
     })
@@ -17,10 +18,12 @@ class Api {
       })
   }
   addPurchases (id) {
-    return fetch(`/purchases`, {
+    return fetch(`/purchases/`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        "X-Requested-With": "XMLHttpRequest",
+        'Content-Type': 'application/json',
+        'X-CSRFToken': document.getElementsByName('csrfmiddlewaretoken')[0].value
       },
       body: JSON.stringify({
         id: id
@@ -34,10 +37,12 @@ class Api {
       })
   }
   removePurchases (id){
-    return fetch(`/purchases/${id}`, {
+    return fetch(`/purchases/${id}/`, {
       method: 'DELETE',
       headers: {
-        'Content-Type': 'application/json'
+        "X-Requested-With": "XMLHttpRequest",
+        'Content-Type': 'application/json',
+        'X-CSRFToken': document.getElementsByName('csrfmiddlewaretoken')[0].value
       }
     })
       .then( e => {
@@ -48,10 +53,12 @@ class Api {
       })
   }
   addSubscriptions(id) {
-    return fetch(`/subscriptions`, {
+    return fetch(`/subscribe/${id}/`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        "X-Requested-With": "XMLHttpRequest",
+        'Content-Type': 'application/json',
+        'X-CSRFToken': document.getElementsByName('csrfmiddlewaretoken')[0].value
       },
       body: JSON.stringify({
         id: id
@@ -65,10 +72,12 @@ class Api {
       })
   }
   removeSubscriptions (id) {
-    return fetch(`/subscriptions/${id}`, {
+    return fetch(`/unsubscribe/${id}/`, {
       method: 'DELETE',
       headers: {
-        'Content-Type': 'application/json'
+        "X-Requested-With": "XMLHttpRequest",
+        'Content-Type': 'application/json',
+        'X-CSRFToken': document.getElementsByName('csrfmiddlewaretoken')[0].value
       }
     })
       .then( e => {
@@ -82,7 +91,9 @@ class Api {
     return fetch(`/favorites`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        "X-Requested-With": "XMLHttpRequest",
+        'Content-Type': 'application/json',
+        'X-CSRFToken': document.getElementsByName('csrfmiddlewaretoken')[0].value
       },
       body: JSON.stringify({
         id: id
@@ -99,7 +110,9 @@ class Api {
     return fetch(`/favorites/${id}`, {
       method: 'DELETE',
       headers: {
-        'Content-Type': 'application/json'
+        "X-Requested-With": "XMLHttpRequest",
+        'Content-Type': 'application/json',
+        'X-CSRFToken': document.getElementsByName('csrfmiddlewaretoken')[0].value
       }
     })
         .then( e => {
@@ -112,7 +125,8 @@ class Api {
     getIngredients  (text)  {
         return fetch(`/ingredients?query=${text}`, {
             headers: {
-                'Content-Type': 'application/json'
+              "X-Requested-With": "XMLHttpRequest",
+              'Content-Type': 'application/json'
             }
         })
             .then( e => {

@@ -13,6 +13,15 @@ class Ingredient(models.Model):
         return self.title
 
 
+class IngredientForRecipe(models.Model):
+    ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
+    amount = models.FloatField()
+
+    def __str__(self):
+        return self.ingredient.title + ' ' + \
+            str(self.amount) + self.ingredient.dimension
+
+
 class Recipe(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField()
@@ -24,21 +33,9 @@ class Recipe(models.Model):
         User, on_delete=models.CASCADE, related_name="recipes"
     )
     image = models.ImageField(upload_to="recipes/", blank=True, null=True)
+    ingredients = models.ManyToManyField(IngredientForRecipe, related_name="recipes")
     tags = TaggableManager()
 
     def __str__(self):
         return self.title
-    
 
-class IngredientForRecipe(models.Model):
-    ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
-    amount = models.FloatField()
-    recipe = models.ForeignKey(
-        Recipe,
-        on_delete=models.CASCADE,
-        related_name="ingredients"
-    )
-
-    def __str__(self):
-        return self.ingredient.title + ' ' + \
-            str(self.amount) + self.ingredient.dimension
