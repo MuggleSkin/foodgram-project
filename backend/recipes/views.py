@@ -6,7 +6,6 @@ from django.shortcuts import get_object_or_404, redirect, render
 
 from .models import Recipe, User, Ingredient, IngredientForRecipe
 from .forms import RecipeForm
-from users.models import Follow
 
 
 def index(request):
@@ -45,8 +44,6 @@ def profile(request, username):
             "author": author,
             "page": page, 
             "paginator": paginator,
-            "is_subscribed": Follow.objects\
-                .filter(user=request.user, author=author).exists()
         },
     )
 
@@ -57,19 +54,13 @@ def recipe_view(request, username, recipe_id):
 
     if request.user.is_authenticated:
         template_name = "singlePage.html"
-        is_subscribed = Follow.objects.filter(
-            user=request.user,
-            author=author
-        ).exists()
     else:
         template_name = "singlePageNotAuth.html"
-        is_subscribed = False
 
     return render(
         request, template_name, {
             "author": author,
             "recipe": recipe,
-            "is_subscribed": is_subscribed,
         },
     )
 
@@ -140,13 +131,13 @@ def recipe_edit(request, username, recipe_id):
 
 @login_required
 def subscriptions(request):
-    follows = Follow.objects.filter(user=request.user)
+    authors = request.user.social.following.all()
     authors_data = []
-    for follow in follows:
+    for author in authors:
         data = dict()
-        data["info"] = follow.author
-        data["recipes"] = follow.author.recipes.order_by("-pub_date")[:3]
-        data["recipes_left"] = follow.author.recipes.count() - 3
+        data["info"] = author
+        data["recipes"] = author.recipes.order_by("-pub_date")[:3]
+        data["recipes_left"] = author.recipes.count() - 3
         authors_data.append(data)
 
     paginator = Paginator(authors_data, 6)
@@ -155,6 +146,21 @@ def subscriptions(request):
     page = paginator.get_page(page_number)
     return render(
         request, "myFollow.html", {"page": page, "paginator": paginator}
+    )
+
+
+@login_required
+def favorites(request):
+    recipe_list = (
+        request.user.social.favorites
+        .select_related("author").order_by("-pub_date").all()
+    )
+    paginator = Paginator(recipe_list, 6)
+
+    page_number = request.GET.get("page")
+    page = paginator.get_page(page_number)
+    return render(
+        request, "favorites.html", {"page": page, "paginator": paginator}
     )
 
 

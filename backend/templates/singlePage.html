@@ -9,6 +9,7 @@
 {% endblock %}
 {% block content %}
     <div class="single-card" data-id="{{ recipe.id }}" data-author="{{ author.id }}">
+        {% csrf_token %}
         {% load thumbnail %}
         {% thumbnail recipe.image "960x339" crop="center" upscale=True as im %}
         <img src="{{ im.url }}" alt="" class="single-card__image">
@@ -17,8 +18,17 @@
             <div class="single-card__header-info">
                 <h1 class="single-card__title">{{ recipe.title }}</h1>
                 <div class="single-card__favorite">
-                    <button class="button button_style_none" name="favorites" data-out><span class="icon-favorite icon-favorite_big"></span></button>
-                    <div class="single-card__favorite-tooltip tooltip">Добавить в избранное</div>
+                    {% if recipe in user.social.favorites.all %}
+                        <button class="button button_style_none" name="favorites">
+                            <span class="icon-favorite icon-favorite_big icon-favorite_active"></span>
+                        </button>
+                        <div class="single-card__favorite-tooltip tooltip">Убрать из избранного</div>
+                    {% else %}
+                        <button class="button button_style_none" name="favorites" data-out>
+                            <span class="icon-favorite icon-favorite_big"></span>
+                        </button>
+                        <div class="single-card__favorite-tooltip tooltip">Добавить в избранное</div>
+                    {% endif %}
                 </div>
             </div>
             <ul class="single-card__items">
@@ -53,12 +63,13 @@
                     name="purchases" data-out><span class="icon-plus"></span> Добавить в покупки</button>
                 </li>
                 {% if user != author %}
-                    <div class="author-subscribe" data-author="{{ author.id }}">
-                        {% csrf_token %}
-                        <li class="single-card__item"><button class="button button_style_light-blue button_size_subscribe" name="subscribe"
-                            {% if is_subscribed %}>Отписаться от автора {% else %} data-out>Подписаться на автора{% endif %}</button>
-                        </li>
-                    </div>
+                    <li class="single-card__item"><button class="button button_style_light-blue button_size_subscribe" name="subscribe" 
+                        {% if author in user.social.following.all %}
+                            >Отписаться от автора 
+                        {% else %} 
+                                data-out>Подписаться на автора
+                        {% endif %}</button>
+                    </li>
                 {% endif %}
             </ul>
             <div class="single-card__section">

@@ -25,12 +25,16 @@
             </li>
         </ul>
     </div>
-    {% if user != author %}
+    {% if user.is_authenticated and user != author %}
         <!--        <p style="padding: 0 0 2em 0;"><a class="button button_style_light-blue" href="#">Подписаться на автора</a></p>-->
         <div class="author-subscribe" data-author="{{ author.id }}">
             {% csrf_token %}
-            <p style="padding: 0 0 2em 0;"><button class="button button_style_light-blue button_size_subscribe" name="subscribe"
-                {% if is_subscribed %}>Отписаться от автора {% else %} data-out>Подписаться на автора{% endif %}</button>
+            <p style="padding: 0 0 2em 0;"><button class="button button_style_light-blue button_size_subscribe" name="subscribe" 
+                {% if author in user.social.following.all %}
+                    >Отписаться от автора 
+                {% else %} 
+                     data-out>Подписаться на автора
+                {% endif %}</button>
             </p>
         </div>
     {% endif %}
