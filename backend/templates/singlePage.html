@@ -59,11 +59,20 @@
                 </ul>
             </div>
             <ul class="single-card__items">
-                <li class="single-card__item"><button class="button button_style_blue" 
-                    name="purchases" data-out><span class="icon-plus"></span> Добавить в покупки</button>
+                <li class="single-card__item">
+                    {% if recipe.id in request.session.purchases.ids %}
+                        <button class="button button_style_light-blue-outline" name="purchases">
+                        <span class="icon-check button__icon"></span> Рецепт добавлен
+                        </button>
+                    {% else %}
+                        <button class="button button_style_blue" name="purchases" data-out>
+                        <span class="icon-plus button__icon"></span> Добавить в покупки
+                        </button>
+                    {% endif %}
                 </li>
                 {% if user != author %}
-                    <li class="single-card__item"><button class="button button_style_light-blue button_size_subscribe" name="subscribe" 
+                    <li class="single-card__item">
+                        <button class="button button_style_light-blue button_size_subscribe" name="subscribe" 
                         {% if author in user.social.following.all %}
                             >Отписаться от автора 
                         {% else %} 

@@ -6,20 +6,20 @@ User = get_user_model()
 
 
 class Ingredient(models.Model):
-    title = models.CharField(max_length=200)
+    title = models.CharField(max_length=200, db_index=True)
     dimension = models.CharField(max_length=20)
 
     def __str__(self):
         return self.title
 
 
-class IngredientForRecipe(models.Model):
+class RecipeIngredient(models.Model):
     ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
-    amount = models.FloatField()
+    amount = models.PositiveIntegerField()
 
     def __str__(self):
-        return self.ingredient.title + ' ' + \
-            str(self.amount) + self.ingredient.dimension
+        return (f"{self.ingredient.title} "
+        f"({self.ingredient.dimension}) - {self.amount}")
 
 
 class Recipe(models.Model):
@@ -32,8 +32,11 @@ class Recipe(models.Model):
     author = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="recipes"
     )
-    image = models.ImageField(upload_to="recipes/", blank=True, null=True)
-    ingredients = models.ManyToManyField(IngredientForRecipe, related_name="recipes")
+    image = models.ImageField(upload_to="recipes/", null=True)
+    ingredients = models.ManyToManyField(
+        RecipeIngredient,
+        related_name="recipes",
+    )
     tags = TaggableManager()
 
     def __str__(self):

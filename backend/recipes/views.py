@@ -4,7 +4,7 @@ from django.core.paginator import Paginator
 from django.core.serializers import serialize
 from django.shortcuts import get_object_or_404, redirect, render
 
-from .models import Recipe, User, Ingredient, IngredientForRecipe
+from .models import Recipe, User, Ingredient, RecipeIngredient
 from .forms import RecipeForm
 
 
@@ -14,6 +14,10 @@ def index(request):
         .order_by("-pub_date")
         .all()
     )
+    tag_names = request.GET.getlist("query")
+    if tag_names:
+        recipe_list = recipe_list.filter(tags__name__in=tag_names).distinct()
+
     paginator = Paginator(recipe_list, 6)
 
     page_number = request.GET.get("page")
@@ -35,6 +39,10 @@ def profile(request, username):
         .order_by("-pub_date")
         .all()
     )
+    tag_names = request.GET.getlist("query")
+    if tag_names:
+        recipe_list = recipe_list.filter(tags__name__in=tag_names).distinct()
+
     paginator = Paginator(recipe_list, 6)
 
     page_number = request.GET.get("page")
@@ -72,14 +80,14 @@ def formify(post_data):
         if key.startswith("nameIngredient"):
             pos = key.split("_")[1]
             title = post_data.pop(key)[0]
-            amount = float(post_data.pop(f"valueIngredient_{pos}")[0])
+            amount = int(post_data.pop(f"valueIngredient_{pos}")[0])
             dimension = post_data.pop(f"unitsIngredient_{pos}")[0]
             ingredient = get_object_or_404(
                 Ingredient, 
                 title=title, 
                 dimension=dimension
             )
-            instance = IngredientForRecipe.objects.get_or_create(
+            instance = RecipeIngredient.objects.get_or_create(
                 ingredient=ingredient,
                 amount=amount
             )[0]
@@ -127,41 +135,6 @@ def recipe_edit(request, username, recipe_id):
         "form": form,
         "recipe": recipe
     })
-
-
-@login_required
-def subscriptions(request):
-    authors = request.user.social.following.all()
-    authors_data = []
-    for author in authors:
-        data = dict()
-        data["info"] = author
-        data["recipes"] = author.recipes.order_by("-pub_date")[:3]
-        data["recipes_left"] = author.recipes.count() - 3
-        authors_data.append(data)
-
-    paginator = Paginator(authors_data, 6)
-
-    page_number = request.GET.get("page")
-    page = paginator.get_page(page_number)
-    return render(
-        request, "myFollow.html", {"page": page, "paginator": paginator}
-    )
-
-
-@login_required
-def favorites(request):
-    recipe_list = (
-        request.user.social.favorites
-        .select_related("author").order_by("-pub_date").all()
-    )
-    paginator = Paginator(recipe_list, 6)
-
-    page_number = request.GET.get("page")
-    page = paginator.get_page(page_number)
-    return render(
-        request, "favorites.html", {"page": page, "paginator": paginator}
-    )
 
 
 def ingredients(request):
