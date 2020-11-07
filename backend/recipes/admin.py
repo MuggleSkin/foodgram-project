@@ -11,9 +11,10 @@ class IngredientAdmin(admin.ModelAdmin):
     search_fields = ("title",)
 
 
-class RecipeIngredientAdmin(admin.ModelAdmin):
-    list_display = ("pk", "data", "amount", )
-    search_fields = ("data",)
+class RecipeIngredientInline(admin.TabularInline):
+    model = Recipe.ingredients_data.through
+    min_num = 1
+
 
 
 class RecipeAdmin(admin.ModelAdmin):
@@ -23,13 +24,14 @@ class RecipeAdmin(admin.ModelAdmin):
         "author",
         "count_favorites",
     )
-    filter_horizontal = ("tags", "ingredients_data",)
-    list_filter = ("author", "title",)
+    filter_horizontal = ("tags",)
+    list_filter = ("author",)
+    search_fields = ("title",)
+    inlines = [RecipeIngredientInline]
 
     def count_favorites(self, obj):
         return obj.fans.count()
 
 
 admin.site.register(Ingredient, IngredientAdmin)
-admin.site.register(RecipeIngredient, RecipeIngredientAdmin)
 admin.site.register(Recipe, RecipeAdmin)

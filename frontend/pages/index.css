@@ -53,6 +53,8 @@
 @import "../blocks/card/__text/card__text.css";
 @import "../blocks/card/__footer/card__foter.css";
 
+@import "../blocks/single-card/__section-text/single-card__section-text.css";
+
 
 
 @import "../blocks/pagination/pagination.css";

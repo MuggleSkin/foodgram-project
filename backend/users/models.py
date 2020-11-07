@@ -13,6 +13,10 @@ class Social(models.Model):
     following = models.ManyToManyField(User, related_name="followers")
     favorites = models.ManyToManyField(Recipe, related_name="fans")
 
+    def __str__(self):
+        return self.user.username
+
+
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:

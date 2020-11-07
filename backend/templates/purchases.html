@@ -14,7 +14,7 @@
     <div class="card-list card-list_column">
         <ul class="shopping-list">
             {% csrf_token %}
-            {% for recipe in recipes %}
+            {% for recipe in purchase.recipes.all %}
                 <li class="shopping-list__item" data-id="{{ recipe.id }}">
                     <div class="recipe recipe_reverse">
                         <img src="{{ recipe.image.url }}" alt="" class="recipe__image recipe__image_big">
@@ -25,13 +25,13 @@
                 </li>
             {% endfor %}
         </ul>
-        {% if request.session.purchases.count > 0 %}
+        {% if purchase.recipes.count > 0 %}
             <ul class="nav__items list">
                 <li class="nav__item">
                     <a href="{% url 'get_shopping_list' %}"><button class="button button_style_blue">Скачать список</button></a>
                 </li>
                 <li class="nav__item">
-                    <a href="{% url 'clear_purchases' %}"><button class="button button_style_blue">Удалить покупки</button></a>
+                    <a href="{% url 'purchase_clear' %}"><button class="button button_style_blue">Удалить покупки</button></a>
                 </li>
             </ul>
         {% endif %}

@@ -62,7 +62,7 @@
             </div>
             <ul class="single-card__items">
                 <li class="single-card__item">
-                    {% if recipe.id in request.session.purchases.ids %}
+                    {% if recipe in purchase.recipes.all %}
                         <button class="button button_style_light-blue-outline" name="purchases">
                         <span class="icon-check button__icon"></span> Рецепт добавлен
                         </button>

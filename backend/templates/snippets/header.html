@@ -18,7 +18,7 @@
     {% if auth_page %} nav__item_disabled {% endif %}">
         <a href="{% url 'purchases' %}" class="nav__link link">Список покупок</a>
         <span class="badge badge_style_blue nav__badge" id="counter">
-        {% if request.session.purchases %} {{ request.session.purchases.count }} {% else %} 0 {% endif %}
+            {% if purchase %} {{ purchase.recipes.count }} {% else %} 0 {% endif %}
         </span>   
     </li>
 </ul>

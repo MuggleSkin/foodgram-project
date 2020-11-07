@@ -32,7 +32,7 @@
     </div>
     <div class="card__footer">
         {% csrf_token %}
-        {% if recipe.id in request.session.purchases.ids %}
+        {% if recipe in purchase.recipes.all %}
             <button class="button button_style_light-blue-outline" name="purchases">
             <span class="icon-check button__icon"></span> Рецепт добавлен
             </button>
