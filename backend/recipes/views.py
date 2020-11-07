@@ -48,7 +48,7 @@ def profile(request, username):
     page_number = request.GET.get("page")
     page = paginator.get_page(page_number)
     return render(
-        request, "authorRecipe.html", {
+        request, "profile.html", {
             "author": author,
             "page": page, 
             "paginator": paginator,
@@ -135,6 +135,15 @@ def recipe_edit(request, username, recipe_id):
         "form": form,
         "recipe": recipe
     })
+
+@login_required
+def recipe_delete(request, username, recipe_id):
+    author = get_object_or_404(User, username=username)
+    if request.user != author:
+        return redirect("recipe", username=username, recipe_id=recipe_id)
+    recipe = get_object_or_404(Recipe, author=author, id=recipe_id)
+    recipe.delete()
+    return redirect("profile", username=username)
 
 
 def ingredients(request):

@@ -34,15 +34,17 @@ INSTALLED_APPS = [
     'recipes',
     'users',
     'purchases',
+    'taggit',
+    'sorl.thumbnail',
+    'widget_tweaks',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'taggit',
-    'sorl.thumbnail',
-    'widget_tweaks',
+    'django.contrib.sites',
+    'django.contrib.flatpages',
 ]
 
 MIDDLEWARE = [
@@ -61,7 +63,7 @@ TEMPLATES_DIR = os.path.join(BASE_DIR, "templates")
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [TEMPLATES_DIR, os.path.join(TEMPLATES_DIR, "base"),],
+        'DIRS': [TEMPLATES_DIR, os.path.join(TEMPLATES_DIR, "snippets"),],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -138,3 +140,5 @@ EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
 EMAIL_FILE_PATH = os.path.join(BASE_DIR, "sent_emails")
 
 PURCHASES_SESSION_ID = "purchases"
+
+SITE_ID = 1

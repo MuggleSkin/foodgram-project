@@ -21,9 +21,13 @@ class RecipeAdmin(admin.ModelAdmin):
         "pk",
         "title",
         "author",
+        "count_favorites",
     )
     filter_horizontal = ("tags", "ingredients",)
-    list_filter = ("author", "title",) 
+    list_filter = ("author", "title",)
+
+    def count_favorites(self, obj):
+        return obj.fans.count()
 
 
 admin.site.register(Ingredient, IngredientAdmin)

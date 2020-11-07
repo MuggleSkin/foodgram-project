@@ -1,6 +1,10 @@
-from django.db import models
 from django.contrib.auth import get_user_model
+from django.db import models
+from django.dispatch import receiver
+
+from sorl.thumbnail import delete
 from taggit.managers import TaggableManager
+
 
 User = get_user_model()
 
@@ -42,3 +46,31 @@ class Recipe(models.Model):
     def __str__(self):
         return self.title
 
+
+@receiver(models.signals.post_delete, sender=Recipe)
+def auto_delete_image_on_delete(**kwargs):
+    """
+    Deletes image from filesystem
+    when corresponding `Recipe` object is deleted.
+    """
+    instance = kwargs["instance"]
+    if instance.image:
+        delete(instance.image)
+
+
+@receiver(models.signals.pre_save, sender=Recipe)
+def auto_delete_image_on_change(**kwargs):
+    """
+    Deletes old image from filesystem
+    when corresponding `Recipe` object is updated
+    with new image.
+    """
+    instance = kwargs["instance"]
+    try:
+        old_image = Recipe.objects.get(pk=instance.pk).image
+        new_image = instance.image
+    except Recipe.DoesNotExist:
+        return
+
+    if old_image and (not old_image == new_image):
+        delete(old_image)

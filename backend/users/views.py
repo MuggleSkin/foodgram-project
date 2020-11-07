@@ -52,7 +52,7 @@ def subscriptions(request):
     page_number = request.GET.get("page")
     page = paginator.get_page(page_number)
     return render(
-        request, "myFollow.html", {"page": page, "paginator": paginator}
+        request, "subscriptions.html", {"page": page, "paginator": paginator}
     )
 
 
@@ -80,3 +80,10 @@ def subscribe(request, author_id):
     elif request.method == "DELETE":
         request.user.social.following.remove(author)
         return JsonResponse({"success": True})
+
+
+def page_not_found(request, exception):
+    return render(request, "misc/404.html",{"path": request.path}, status=404)
+
+def server_error(request):
+    return render(request, "misc/500.html", status=500) 
