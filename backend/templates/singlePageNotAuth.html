@@ -30,7 +30,13 @@
             </ul>
             <div class="single-card__items single-card__items_column">
                 <p class="single-card__text"><span class="icon-time"></span> {{ recipe.cooking_time }} мин.</p>
-                <p class="single-card__text"><span class="icon-user"></span> {{ author.username }}</p>
+                <p class="single-card__text"><span class="icon-user"></span> 
+                    {% if author.get_full_name %}
+                        {{ author.get_full_name }}
+                    {% else %}
+                        {{ author.username }}
+                    {% endif %}
+                </p>
             </div>
             <ul class="single-card__items">
                 <li class="single-card__item">
@@ -50,7 +56,7 @@
                 <div class="single-card__items single-card__items_column">
                     {% for ing in recipe.ingredients.all %}
                         <p class=" single-card__section-item">
-                            {{ ing.ingredient.title }} - {{ ing.amount }} {{ ing.ingredient.dimension }}
+                            {{ ing.data.title }} - {{ ing.amount }} {{ ing.data.dimension }}
                         </p>
                     {% endfor %}
                 </div>

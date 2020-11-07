@@ -68,18 +68,15 @@
                         {% for ing in recipe.ingredients.all %}
                             {% with i=forloop.counter %}
                                 <div class="form__field-item-ingredient" id="ing_{{ i }}">
-                                    <span> {{ ing.ingredient.title }} {{ ing.amount }}{{ ing.ingredient.dimension }}</span>
+                                    <span> {{ ing.data.title }} {{ ing.amount }}{{ ing.data.dimension }}</span>
                                     <span class="form__field-item-delete"></span>
-                                    <input id="nameIngredient_{{ i }}" name="nameIngredient_{{ i }}" type="hidden" value="{{ ing.ingredient.title }}">
+                                    <input id="nameIngredient_{{ i }}" name="nameIngredient_{{ i }}" type="hidden" value="{{ ing.data.title }}">
                                     <input id="valueIngredient_{{ i }}" name="valueIngredient_{{ i }}" type="hidden" value="{{ ing.amount }}">
-                                    <input id="unitsIngredient_{{ i }}" name="unitsIngredient_{{ i }}" type="hidden" value="{{ ing.ingredient.dimension }}">
+                                    <input id="unitsIngredient_{{ i }}" name="unitsIngredient_{{ i }}" type="hidden" value="{{ ing.data.dimension }}">
                                 </div>
                             {% endwith %}
                         {% endfor %}
                     </div> 
-                    {% for error in form.ingredients.errors %}
-                        <span class="form__error">{{ error }}</span>
-                    {% endfor %}
                 </div>
             </div>
             <div class="form__group">

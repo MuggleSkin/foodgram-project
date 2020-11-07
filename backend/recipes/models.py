@@ -17,15 +17,6 @@ class Ingredient(models.Model):
         return self.title
 
 
-class RecipeIngredient(models.Model):
-    ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
-    amount = models.PositiveIntegerField()
-
-    def __str__(self):
-        return (f"{self.ingredient.title} "
-        f"({self.ingredient.dimension}) - {self.amount}")
-
-
 class Recipe(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField()
@@ -37,14 +28,32 @@ class Recipe(models.Model):
         User, on_delete=models.CASCADE, related_name="recipes"
     )
     image = models.ImageField(upload_to="recipes/", null=True)
-    ingredients = models.ManyToManyField(
-        RecipeIngredient,
+    ingredients_data = models.ManyToManyField(
+        Ingredient,
         related_name="recipes",
+        through="RecipeIngredient",
     )
     tags = TaggableManager()
 
     def __str__(self):
         return self.title
+
+
+class RecipeIngredient(models.Model):
+    data = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
+    recipe = models.ForeignKey(
+        Recipe,
+        on_delete=models.CASCADE,
+        related_name="ingredients"
+    )
+    amount = models.PositiveIntegerField()
+
+    class Meta:
+        unique_together = ("data", "recipe")
+
+    def __str__(self):
+        return (f"{self.data.title} "
+        f"({self.data.dimension}) - {self.amount}")
 
 
 @receiver(models.signals.post_delete, sender=Recipe)

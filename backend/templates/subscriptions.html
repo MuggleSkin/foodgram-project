@@ -16,7 +16,13 @@
         {% for author in page %}
             <div class="card-user" data-author="{{ author.info.id }}">
                 <div class="card-user__header">
-                    <h2 class="card-user__title">{{ author.info.username }}</h2>
+                    <h2 class="card-user__title">
+                        {% if author.info.get_full_name %}
+                            {{ author.info.get_full_name }}
+                        {% else %}
+                            {{ author.info.username }}
+                        {% endif %}
+                    </h2>
                 </div>
                 <div class="card-user__body">
                     <ul class="card-user__items">
@@ -33,7 +39,7 @@
                             <li class="card-user__item">
                                 <a href="{% url 'profile' username=author.info.username %}" 
                                     class="card-user__link link">Еще {{ author.recipes_left}} 
-                                    {{author.recipes_left|rupluralize:'рецепт,рецепта,рецептов' }}...
+                                    {{ author.recipes_left|rupluralize:'рецепт,рецепта,рецептов' }}...
                                 </a>
                             </li>
                         {% endif %}

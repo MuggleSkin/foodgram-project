@@ -12,8 +12,8 @@ class IngredientAdmin(admin.ModelAdmin):
 
 
 class RecipeIngredientAdmin(admin.ModelAdmin):
-    list_display = ("pk", "ingredient", "amount", )
-    search_fields = ("ingredient",)
+    list_display = ("pk", "data", "amount", )
+    search_fields = ("data",)
 
 
 class RecipeAdmin(admin.ModelAdmin):
@@ -23,7 +23,7 @@ class RecipeAdmin(admin.ModelAdmin):
         "author",
         "count_favorites",
     )
-    filter_horizontal = ("tags", "ingredients",)
+    filter_horizontal = ("tags", "ingredients_data",)
     list_filter = ("author", "title",)
 
     def count_favorites(self, obj):

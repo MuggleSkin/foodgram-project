@@ -12,7 +12,7 @@
         <h1 class="main__title">{{ flatpage.title }}</h1>
     </div>
     <div class="custom-center-block">
-        <pre class="custom-text-block">{{ flatpage.content }}</pre>
+        <p class="custom-text-block">{{ flatpage.content|linebreaksbr }}</p>
         <div class="custom-button-block">
             <a href="{% url 'index' %}"><button class="button button_style_blue">Перейти на главную</button></a>
         </div>

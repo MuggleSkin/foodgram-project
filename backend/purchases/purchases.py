@@ -13,7 +13,6 @@ class Purchases:
     
     def save(self):
         self.session[settings.PURCHASES_SESSION_ID] = self.purchases
-        self.session.modified = True
 
     def add(self, recipe):
         if recipe.id not in self.purchases["ids"]:
@@ -34,4 +33,3 @@ class Purchases:
     def clear(self):
         self.purchases = {"ids" : [], "count" : 0,}
         del self.session[settings.PURCHASES_SESSION_ID]
-        self.session.modified = True

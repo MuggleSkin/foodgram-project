@@ -31,13 +31,13 @@ def get_shopping_list(request):
     recipe_list = Recipe.objects.filter(id__in=purchases.get_ids()).all()
     used_ingredients = []
     for recipe in recipe_list:
-        for item in recipe.ingredients.all():
+        for ing in recipe.ingredients.all():
             is_unique = True
             for used in used_ingredients:
-                if item.ingredient == used.ingredient:
-                    used.amount += item.amount
+                if ing.data == used.data:
+                    used.amount += ing.amount
                     is_unique = False
-            if is_unique: used_ingredients.append(item)
+            if is_unique: used_ingredients.append(ing)
 
     shopping_list = StringIO()
     for ingredient in used_ingredients:

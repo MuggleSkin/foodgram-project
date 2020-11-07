@@ -58,12 +58,7 @@
                         <label for="cantidad" class="form__label" id="cantidadVal">шт.</label>
                     </div>
                     <span class="form__ingredient-link" id="addIng">Добавить ингредиент</span>
-                    <div class="form__field-group-ingredientes-container">
-
-                    </div>
-                    {% for error in form.ingredients.errors %}
-                        <span class="form__error">{{ error }}</span>
-                    {% endfor %}
+                    <div class="form__field-group-ingredientes-container"></div>
                 </div>
             </div>
             <div class="form__group">
