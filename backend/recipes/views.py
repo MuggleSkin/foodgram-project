@@ -94,7 +94,7 @@ def formify(query_dict):
 def new_recipe(request):
     data = formify(request.POST) if request.POST else None
     form = RecipeForm(data, files=request.FILES or None)
-  
+
     if request.method == "POST":
         if "ingredients" not in data:
             form.add_error(None, "Добавьте ингредиенты")
