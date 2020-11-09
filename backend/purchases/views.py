@@ -35,7 +35,7 @@ def get_shopping_list(request):
                 if ing.data == used.data:
                     used.amount += ing.amount
                     is_unique = False
-            if is_unique: 
+            if is_unique:
                 used_ingredients.append(ing)
 
     shopping_list = StringIO()

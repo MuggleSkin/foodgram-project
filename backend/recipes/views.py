@@ -50,7 +50,7 @@ def profile(request, username):
     return render(
         request, "profile.html", {
             "author": author,
-            "page": page, 
+            "page": page,
             "paginator": paginator,
         },
     )
@@ -94,8 +94,10 @@ def formify(query_dict):
 def new_recipe(request):
     data = formify(request.POST) if request.POST else None
     form = RecipeForm(data, files=request.FILES or None)
-
+  
     if request.method == "POST":
+        if "ingredients" not in data:
+            form.add_error(None, "Добавьте ингредиенты")
         if form.is_valid():
             unsaved_recipe = form.save(commit=False)
             unsaved_recipe.author = request.user
@@ -103,7 +105,7 @@ def new_recipe(request):
             form.save_m2m()
             for title, dimension, amount in data.getlist("ingredients"):
                 ingredient_data = get_object_or_404(
-                    Ingredient, 
+                    Ingredient,
                     title=title,
                     dimension=dimension
                 )
@@ -129,11 +131,14 @@ def recipe_edit(request, username, recipe_id):
     form = RecipeForm(data, files=request.FILES or None, instance=recipe)
 
     if request.method == "POST":
+        if "ingredients" not in data:
+            form.add_error(None, "Добавьте ингредиенты")
         if form.is_valid():
             recipe = form.instance
+            initial = recipe.ingredients_data.all()
             for title, dimension, amount in data.getlist("ingredients"):
                 ingredient_data = get_object_or_404(
-                    Ingredient, 
+                    Ingredient,
                     title=title,
                     dimension=dimension
                 )
@@ -143,6 +148,10 @@ def recipe_edit(request, username, recipe_id):
                     amount=amount
                 )
                 recipe.ingredients_data.add(ingredient_data)
+                if ingredient_data in initial:
+                    initial = initial.exclude(id=ingredient_data.id)
+            for ing in initial:
+                recipe.ingredients_data.remove(ing)
             form.save()
             return redirect("recipe", username=username, recipe_id=recipe_id)
 
@@ -150,6 +159,7 @@ def recipe_edit(request, username, recipe_id):
         "form": form,
         "recipe": recipe
     })
+
 
 @login_required
 def recipe_delete(request, username, recipe_id):
@@ -164,7 +174,8 @@ def recipe_delete(request, username, recipe_id):
 def ingredients(request):
     result = Ingredient.objects.all()
     query = request.GET.get("query", "").lower()
-    if query: result = result.filter(title__startswith=query)
+    if query:
+        result = result.filter(title__startswith=query)
     raw_data = serialize("python", result)
     formatted_data = [item['fields'] for item in raw_data]
     return JsonResponse(formatted_data, safe=False)

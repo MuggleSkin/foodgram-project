@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden, JsonResponse
 from django.views.generic import CreateView
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import get_object_or_404, render
 
 from .forms import CreationForm
 from .models import Recipe
@@ -44,7 +44,10 @@ def subscriptions(request):
     for author in authors:
         data = dict()
         data["info"] = author
-        data["recipes"] = author.recipes.order_by("-pub_date")[:RECIPES_DISPLAYED]
+        data["recipes"] = (
+            author.recipes
+            .order_by("-pub_date")[:RECIPES_DISPLAYED]
+        )
         data["recipes_left"] = author.recipes.count() - RECIPES_DISPLAYED
         authors_data.append(data)
 
@@ -83,7 +86,11 @@ def subscribe(request, author_id):
 
 
 def page_not_found(request, exception):
-    return render(request, "misc/404.html",{"path": request.path}, status=404)
+    return render(
+        request, "misc/404.html",
+        {"path": request.path}, status=404
+    )
+
 
 def server_error(request):
-    return render(request, "misc/500.html", status=500) 
+    return render(request, "misc/500.html", status=500)

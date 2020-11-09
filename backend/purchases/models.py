@@ -18,4 +18,4 @@ class Purchase(models.Model):
 @receiver(post_save, sender=Session)
 def create_purchase(sender, instance, created, **kwargs):
     if created:
-        Purchase.objects.create(session=instance)
+        Purchase.objects.get_or_create(session=instance)

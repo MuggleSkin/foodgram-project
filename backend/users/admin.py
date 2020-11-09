@@ -6,6 +6,7 @@ from .models import Social
 
 User = get_user_model()
 
+
 class UserAdminCustom(UserAdmin):
     search_fields = UserAdmin.search_fields
     search_fields += ('username', 'email',)

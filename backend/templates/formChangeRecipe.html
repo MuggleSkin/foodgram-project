@@ -77,6 +77,9 @@
                             {% endwith %}
                         {% endfor %}
                     </div> 
+                    {% for error in form.non_field_errors %}
+                        <span class="form__error">{{ error }}</span>
+                    {% endfor %}
                 </div>
             </div>
             <div class="form__group">

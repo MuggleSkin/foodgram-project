@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Ingredient, RecipeIngredient, Recipe
+from .models import Ingredient, Recipe
 
 
 class IngredientAdmin(admin.ModelAdmin):
@@ -14,7 +14,6 @@ class IngredientAdmin(admin.ModelAdmin):
 class RecipeIngredientInline(admin.TabularInline):
     model = Recipe.ingredients_data.through
     min_num = 1
-
 
 
 class RecipeAdmin(admin.ModelAdmin):

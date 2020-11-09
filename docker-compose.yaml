@@ -1,0 +1,47 @@
+version: '3.7'
+
+volumes:
+  postgres_data:
+  static:
+  media:
+
+services:
+  db:
+    image: postgres:12.4
+    restart: always
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - ./.env
+      
+  web:
+    image: muggleskin/foodgram-project_web:latest
+    restart: always
+    expose:
+      - 8000
+    volumes:
+      - static:/code/static
+      - media:/code/media
+    depends_on:
+      - db
+    env_file:
+      - ./.env
+    command: >
+      bash -c "python manage.py makemigrations --no-input
+      && python manage.py migrate --no-input
+      && python manage.py collectstatic --no-input
+      && gunicorn foodgram_project.wsgi:application --bind 0.0.0.0:8000"
+
+  nginx:
+    image: nginx
+    restart: always
+    ports:
+      - 80:80
+    volumes:
+      - ./nginx_templates:/etc/nginx/templates
+      - static:/code/static
+      - media:/code/media
+    env_file:
+      - ./.env
+    depends_on:
+      - web

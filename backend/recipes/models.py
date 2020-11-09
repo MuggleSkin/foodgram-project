@@ -52,8 +52,10 @@ class RecipeIngredient(models.Model):
         unique_together = ("data", "recipe")
 
     def __str__(self):
-        return (f"{self.data.title} "
-        f"({self.data.dimension}) - {self.amount}")
+        return (
+            f"{self.data.title} "
+            f"({self.data.dimension}) - {self.amount}"
+        )
 
 
 @receiver(models.signals.post_delete, sender=Recipe)

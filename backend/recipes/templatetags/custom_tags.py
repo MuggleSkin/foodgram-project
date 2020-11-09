@@ -11,17 +11,19 @@ def add_get_param(context, key, val):
     """
     request = context["request"]
     params = request.GET.copy()
-    if key in params and val in params.getlist(key) :
+    if key in params and val in params.getlist(key):
         return request.get_full_path()
     params.appendlist(key, val)
-    
+
     # Reset paginator in case get param impacts filtering
     if key == "query" and "page" in params:
         del params["page"]
 
     query_path = params.urlencode()
-    if query_path: query_path = "?" + query_path
+    if query_path:
+        query_path = "?" + query_path
     return request.path + query_path
+
 
 @register.simple_tag(takes_context=True)
 def remove_get_param(context, key, val):
@@ -46,8 +48,10 @@ def remove_get_param(context, key, val):
         del params["page"]
 
     query_path = params.urlencode()
-    if query_path: query_path = "?" + query_path
+    if query_path:
+        query_path = "?" + query_path
     return request.path + query_path
+
 
 @register.simple_tag(takes_context=True)
 def replace_get_param(context, key, new_val):
@@ -64,5 +68,6 @@ def replace_get_param(context, key, new_val):
         del params["page"]
 
     query_path = params.urlencode()
-    if query_path: query_path = "?" + query_path
+    if query_path:
+        query_path = "?" + query_path
     return request.path + query_path
