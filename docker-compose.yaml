@@ -26,6 +26,8 @@ services:
       - db
     env_file:
       - ./.env
+    environment:
+      - SECRET_KEY=6j^3#ejnbwy1dr!p7iq6%s_-phzcjl+*^=*c3=-d&%6rs6dd^_
     command: >
       bash -c "python manage.py makemigrations --no-input
       && python manage.py migrate --no-input
