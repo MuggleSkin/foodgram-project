@@ -7,7 +7,7 @@ Foodgram is a projects that allows you to share your recipes with community and 
 Running at
 
 ```
-http://foodgramm.tk
+http://45.140.167.101/
 ```
 
 ## Getting Started
