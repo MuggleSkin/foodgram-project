@@ -1,6 +1,9 @@
 <div class="card" data-id="{{ recipe.id }}">
     <a href="{% url 'recipe' username=recipe.author.username recipe_id=recipe.id %}" class="link" target="_blank">
-        <img src="{{ recipe.image.url }}" alt="" class="card__image">
+        {% load thumbnail %}
+        {% thumbnail recipe.image "x240" as im %}
+            <img src="{{ im.url }}" alt="" class="card__image">
+        {% endthumbnail %}
     </a>
     <div class="card__body">
         <a class="card__title link" href="{% url 'recipe' username=recipe.author.username recipe_id=recipe.id %}" 

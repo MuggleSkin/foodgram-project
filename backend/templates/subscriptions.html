@@ -13,6 +13,7 @@
     </div>
     <div class="card-list">
         {% load custom_filters %}
+        {% load thumbnail %}
         {% for author in page %}
             <div class="card-user" data-author="{{ author.info.id }}">
                 <div class="card-user__header">
@@ -29,7 +30,9 @@
                         {% for recipe in author.recipes %}
                             <li class="card-user__item">
                                 <div class="recipe">
-                                    <img src="{{ recipe.image.url }}" alt="" class="recipe__image">
+                                    {% thumbnail recipe.image "72x72" as im %}
+                                        <img src="{{ im.url }}" alt="" class="recipe__image">
+                                    {% endthumbnail %}
                                     <h3 class="recipe__title">{{ recipe.title }}</h3>
                                     <p class="recipe__text"><span class="icon-time"></span> {{ recipe.cooking_time }} мин.</p>
                                 </div>

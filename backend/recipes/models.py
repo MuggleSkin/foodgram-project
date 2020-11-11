@@ -10,43 +10,54 @@ User = get_user_model()
 
 
 class Ingredient(models.Model):
-    title = models.CharField(max_length=200, db_index=True)
-    dimension = models.CharField(max_length=20)
+    title = models.CharField(
+        max_length=200, db_index=True, verbose_name="название"
+    )
+    dimension = models.CharField(
+        max_length=20, verbose_name="единица измерения"
+    )
 
     def __str__(self):
         return self.title
 
 
 class Recipe(models.Model):
-    title = models.CharField(max_length=200)
-    description = models.TextField()
-    cooking_time = models.PositiveSmallIntegerField()
+    title = models.CharField(max_length=200, verbose_name="название")
+    description = models.TextField(verbose_name="описание")
+    cooking_time = models.PositiveSmallIntegerField(
+        verbose_name="время приготовления"
+    )
     pub_date = models.DateTimeField(
-        "date published", auto_now_add=True, db_index=True
+        verbose_name="дата публикации", auto_now_add=True, db_index=True
     )
     author = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="recipes"
+        User, on_delete=models.CASCADE,
+        related_name="recipes", verbose_name="автор"
     )
-    image = models.ImageField(upload_to="recipes/", null=True)
+    image = models.ImageField(
+        upload_to="recipes/", null=True, verbose_name="картинка"
+    )
     ingredients_data = models.ManyToManyField(
-        Ingredient,
-        related_name="recipes",
-        through="RecipeIngredient",
+        Ingredient, related_name="recipes",
+        through="RecipeIngredient", verbose_name="данные ингредиентов"
     )
-    tags = TaggableManager()
+    tags = TaggableManager(verbose_name="теги")
 
     def __str__(self):
         return self.title
 
 
 class RecipeIngredient(models.Model):
-    data = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
-    recipe = models.ForeignKey(
-        Recipe,
+    data = models.ForeignKey(
+        Ingredient,
         on_delete=models.CASCADE,
-        related_name="ingredients"
+        verbose_name="данные ингредиента"
     )
-    amount = models.PositiveIntegerField()
+    recipe = models.ForeignKey(
+        Recipe, on_delete=models.CASCADE,
+        related_name="ingredients", verbose_name="рецепт"
+    )
+    amount = models.PositiveIntegerField(verbose_name="количество")
 
     class Meta:
         unique_together = ("data", "recipe")

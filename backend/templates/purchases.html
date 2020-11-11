@@ -14,10 +14,13 @@
     <div class="card-list card-list_column">
         <ul class="shopping-list">
             {% csrf_token %}
+            {% load thumbnail %}
             {% for recipe in purchase.recipes.all %}
                 <li class="shopping-list__item" data-id="{{ recipe.id }}">
                     <div class="recipe recipe_reverse">
-                        <img src="{{ recipe.image.url }}" alt="" class="recipe__image recipe__image_big">
+                        {% thumbnail recipe.image "90x90" as im %}
+                            <img src="{{ im.url }}" alt="" class="recipe__image recipe__image_big">
+                        {% endthumbnail %}
                         <h3 class="recipe__title">{{ recipe.title }}</h3>
                         <p class="recipe__text"><span class="icon-time"></span> {{ recipe.cooking_time }} мин.</p>
                     </div>

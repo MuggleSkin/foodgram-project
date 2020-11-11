@@ -23,9 +23,9 @@ def index(request):
     page_number = request.GET.get("page")
     page = paginator.get_page(page_number)
     if request.user.is_authenticated:
-        template_name = "indexAuth.html"
+        template_name = "index_auth.html"
     else:
-        template_name = "indexNotAuth.html"
+        template_name = "index_not_auth.html"
     return render(
         request, template_name, {"page": page, "paginator": paginator}
     )
@@ -61,9 +61,9 @@ def recipe_view(request, username, recipe_id):
     recipe = get_object_or_404(Recipe, author=author, id=recipe_id)
 
     if request.user.is_authenticated:
-        template_name = "singlePage.html"
+        template_name = "single_page.html"
     else:
-        template_name = "singlePageNotAuth.html"
+        template_name = "single_page_not_auth.html"
 
     return render(
         request, template_name, {
@@ -117,7 +117,7 @@ def new_recipe(request):
                 unsaved_recipe.ingredients_data.add(ingredient_data)
             return redirect("index")
 
-    return render(request, "formRecipe.html", {"form": form})
+    return render(request, "form_recipe.html", {"form": form})
 
 
 @login_required
@@ -155,7 +155,7 @@ def recipe_edit(request, username, recipe_id):
             form.save()
             return redirect("recipe", username=username, recipe_id=recipe_id)
 
-    return render(request, "formChangeRecipe.html", {
+    return render(request, "form_change_recipe.html", {
         "form": form,
         "recipe": recipe
     })

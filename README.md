@@ -4,19 +4,13 @@
 
 Foodgram is a projects that allows you to share your recipes with community and learn the new ones.
 
-Running at
+Running at:
 
-```
-http://45.140.167.101/
-```
+[Foodgram site](http://185.181.11.219/)
 
 ## Getting Started
 
-Install docker engine:
-
 [Install docker engine](https://docs.docker.com/engine/install/)
-
-and docker-compose:
 
 [Install docker-compose](https://docs.docker.com/compose/install/)
 

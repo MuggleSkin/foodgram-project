@@ -9,9 +9,19 @@ User = get_user_model()
 
 
 class Social(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    following = models.ManyToManyField(User, related_name="followers")
-    favorites = models.ManyToManyField(Recipe, related_name="fans")
+    user = models.OneToOneField(
+        User, on_delete=models.CASCADE, verbose_name="пользователь"
+    )
+    following = models.ManyToManyField(
+        User,
+        related_name="followers",
+        verbose_name="подписки"
+    )
+    favorites = models.ManyToManyField(
+        Recipe,
+        related_name="fans",
+        verbose_name="избранное"
+    )
 
     def __str__(self):
         return self.user.username
